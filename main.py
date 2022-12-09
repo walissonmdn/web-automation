@@ -245,67 +245,66 @@ class main(QMainWindow): # Class to represent the automation code and its settin
             driver.switch_to.window(driver.window_handles[window_selected])
 
             # Inserting "unidade" and "chave de acesso" in order to fill the fields automatically.
-            click(driver, '//*[@id="btnCriarPedido"]/span[2]')        
-            click(driver, '//*[@id="opcoesDigitalizacao"]/tbody/tr/td[4]/div/div[2]/span')
-            fill(driver, '//*[@id="itUnidadeCteDigitalizacao_input"]', self.unidade)
-            click(driver, '//*[@id="itUnidadeCteDigitalizacao_panel"]/table/tbody/tr')
+            click(driver, 'button#btnCriarPedido')
+            click(driver, 'table#opcoesDigitalizacao > tbody > tr > td:nth-child(4) > div > div.ui-radiobutton-box.ui-widget.ui-corner-all.ui-state-default')
+            fill(driver, 'input#itUnidadeCteDigitalizacao_input', self.unidade)
+            click(driver, "span#itUnidadeCteDigitalizacao_panel > table > tbody > tr[data-item-label*='"+self.unidade+"']")
             time.sleep(0.5)
-            fill(driver, '//*[@id="itChaveCteDigitalizacao"]', chave)
-            click(driver, '//*[@id="btnEnviarCaptchaCteInformar"]/span[2]')
+            fill(driver, 'input#itChaveCteDigitalizacao', chave)
+            click(driver, 'button#btnEnviarCaptchaCteInformar')
 
             # Checking if "unidade" is already filled and if so, it checks if it's correct.
-            click(driver, '//*[@id="tbViewDigitalizacaoNf:unidadeOrganizacional_input"]')
-            string_unidade = driver.find_element(by = By.XPATH, value = '//*[@id="tbViewDigitalizacaoNf:unidadeOrganizacional_input"]').get_attribute("value")
-            if self.unidade in string_unidade:
+            click(driver, 'input#tbViewDigitalizacaoNf\:unidadeOrganizacional_input')
+            string_unidade = driver.find_element(by = By.CSS_SELECTOR, value = 'input#tbViewDigitalizacaoNf\:unidadeOrganizacional_input')
+            if self.unidade in string_unidade.get_attribute("value"):
                 pass
             else:
-                driver.find_element(by = By.XPATH, value = '//*[@id="tbViewDigitalizacaoNf:unidadeOrganizacional_input"]').clear() # Clearing the field to fill in again and make sure it'll be correct.
-                fill(driver, '//*[@id="tbViewDigitalizacaoNf:unidadeOrganizacional_input"]', self.unidade) # Typing "CNPJ".
-                click(driver, '//*[@id="tbViewDigitalizacaoNf:unidadeOrganizacional_panel"]/table/tbody/tr') # Selecting "unidade"
+                string_unidade.clear() # Clearing the field to fill in again and make sure it'll be correct.
+                fill(driver, 'input#tbViewDigitalizacaoNf\:unidadeOrganizacional_input', self.unidade) # Typing "CNPJ".
+                                        #tbViewDigitalizacaoNf\:unidadeOrganizacional_panel > table > tbody > tr
+                click(driver, "span#tbViewDigitalizacaoNf\:unidadeOrganizacional_panel > table > tbody > tr[data-item-label*='"+self.unidade+"']") # Selecting "unidade"
             # Going to the next step.
-            click(driver, '//*[@id="tbViewDigitalizacaoNf:btnProximoNota"]/span[2]')
+            click(driver, 'button#tbViewDigitalizacaoNf\:btnProximoNota')
             time.sleep(0.8)
 
             # Payment method.
+            select = Select(driver.find_element(by = By.CSS_SELECTOR, value = 'select#tbViewDigitalizacaoNf\:soFormaPagamento_input'))
             if self.forma_pagamento == "Boleto Agrupado" and self.inserir_primeiro_cte == True: # "Boleto agrupado" and no "CT-e" inserted.
-                select = Select(driver.find_element(by = By.XPATH, value = '//*[@id="tbViewDigitalizacaoNf:soFormaPagamento_input"]'))
                 select.select_by_visible_text('Boleto Agrupado')
 
             elif self.forma_pagamento == "Boleto Agrupado" and self.inserir_primeiro_cte == False: # "Boleto agrupado" and there's already "CT-e" inserted.
-                select = Select(driver.find_element(by = By.XPATH, value = '//*[@id="tbViewDigitalizacaoNf:soFormaPagamento_input"]'))
                 select.select_by_visible_text("Boleto Agrupado")
-                click(driver, '//*[@id="tbViewDigitalizacaoNf:sbPrimeiroBoleto"]') # Changing "Primeira nota?" button to "Não"
+                click(driver, 'div#tbViewDigitalizacaoNf\:sbPrimeiroBoleto') # Changing "Primeira nota?" button to "Não"
 
             elif self.forma_pagamento == "Boleto em Anexo": # "Boleto em anexo"
-                select = Select(driver.find_element(by = By.XPATH, value = '//*[@id="tbViewDigitalizacaoNf:soFormaPagamento_input"]'))
                 select.select_by_visible_text("Boleto em anexo")
         
             # Checking if "agência" label disappeared in order to continue.
             while True: 
                 try:
-                    driver.find_element(by = By.XPATH, value = '//*[@id="tbViewDigitalizacaoNf:j_idt402"]/div[1]/div[3]/label[1]')
+                    driver.find_element(by = By.css, value = "div#tbViewDigitalizacaoNf\:j_idt415 > div:nth-child(1) > div:nth-child(3) > label[for='tbViewDigitalizacaoNf:itAgencia']")
                 except:
-                    break    
+                    break
 
             # Clicking on field "juros" and then on "CT-e" to make sure it'll be visible.
-            click(driver, '//*[@id="tbViewDigitalizacaoNf:accordionAnexos"]/div[5]') 
-            click(driver, '//*[@id="tbViewDigitalizacaoNf:accordionAnexos"]/div[1]')
+            click(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos > div:nth-child(5)') 
+            click(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos > div:nth-child(1)')
 
             # Inserting "CT-e" pdf.
-            fill(driver, '//*[@id="tbViewDigitalizacaoNf:accordionAnexos:j_idt465_input"]', self.cte_path + "/" + cte + ".pdf")
+            fill(driver, 'input#tbViewDigitalizacaoNf\:accordionAnexos\:j_idt465_input', self.cte_path + "/" + cte + ".pdf")
             time.sleep(0.5)
-            click(driver, '//*[@id="tbViewDigitalizacaoNf:accordionAnexos:j_idt465"]/div[1]/button[1]/span[2]')
+            click(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos\:j_idt465 > div.ui-fileupload-buttonbar.ui-widget-header.ui-corner-top > button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-fileupload-upload')
 
             # "Data de vencimento".
             while True:
                 try:
-                    driver.find_element(by = By.XPATH, value = '//*[@id="tbViewDigitalizacaoNf:accordionAnexos:dtAnexoNotaDigitalizacao:0:btnVisualizaAnexoNota"]/span[1]')
-                    fill(driver, '//*[@id="tbViewDigitalizacaoNf:calDataVencimento_input"]', self.data_vencimento)
-                    click(driver, '//*[@id="tbViewDigitalizacaoNf:accordionAnexos"]/div[3]')
+                    driver.find_element(by = By.CSS_SELECTOR, value = 'button#tbViewDigitalizacaoNf\:accordionAnexos\:dtAnexoNotaDigitalizacao\:0\:btnVisualizaAnexoNota')
+                    fill(driver, 'input#tbViewDigitalizacaoNf\:calDataVencimento_input', self.data_vencimento)
+                    click(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos > div:nth-child(3)')
                     break
                 except:
                     continue
-                
+
             # Inserting documento for payment or typing the first "CT-e" number.
             if self.forma_pagamento == "Boleto em Anexo" or (self.forma_pagamento == "Boleto Agrupado" and self.inserir_primeiro_cte == True):
                 inserir_boleto(driver, self.fatura_path)
@@ -314,45 +313,43 @@ class main(QMainWindow): # Class to represent the automation code and its settin
                 agrupar_nota(driver, self.primeiro_cte, repeticao_pagina)
             
             # Going to the next step.
-            click(driver, '//*[@id="tbViewDigitalizacaoNf:btnProximoRateio"]/span[2]')
+            click(driver, 'button#tbViewDigitalizacaoNf\:btnProximoRateio')
             time.sleep(0.5)
 
             # Inserting "rateio".
-            click(driver, '//*[@id="tbViewDigitalizacaoNf:btnAdicionarRateio"]/span[2]')# "Adicionar" button.
+            click(driver, 'button#tbViewDigitalizacaoNf\:btnAdicionarRateio')# "Adicionar" button.
+
             # Searching for the departament.
-            click(driver, '//*[@id="srCentroCustoRateio_label"]') # Expanding department list.
-
-
-            print("Starting now")
+            click(driver, 'label#srCentroCustoRateio_label') # Expanding department list.
             time.sleep(1)
             for num in range(50): # Search for "Peças".
-                centro_rateio = driver.find_element(by = By.XPATH, value = '//*[@id="srCentroCustoRateio_'+str(num)+'"]').text                
+                centro_rateio = driver.find_element(by = By.CSS_SELECTOR, value = 'li#srCentroCustoRateio_'+str(num)).text                
                 if "Peças" in centro_rateio:
-                    click(driver, '//*[@id="srCentroCustoRateio_'+str(num)+'"]')
+                    click(driver, 'li#srCentroCustoRateio_'+str(num))
                     break
     
             time.sleep(0.5)
 
-            # Searching for the user.
-            click(driver, '//*[@id="srUsuarioAprovador_label"]') # Expanding user list.
+            # Searching for the user. 
+            click(driver, 'label#srUsuarioAprovador_label') # Expanding user list.
             time.sleep(1)
-            for num in range(30):   # Search for Pedro
-                nome_rateio = driver.find_element(by = By.XPATH, value = '//*[@id="srUsuarioAprovador_'+str(num)+'"]').text
-                if "PEDRO FELIPE" in nome_rateio:
-                    click(driver, '//*[@id="srUsuarioAprovador_'+str(num)+'"]')
+            for num in range(30):   # Search for Pedro #srUsuarioAprovador_1
+                nome_rateio = driver.find_element(by = By.CSS_SELECTOR, value = 'li#srUsuarioAprovador_'+str(num)).text
+                if "PEDRO FELIPE FERREIRA LEITE" in nome_rateio:
+                    click(driver, 'li#srUsuarioAprovador_'+str(num))
                     break
             time.sleep(0.5)
 
             # Inserting value of "rateio".
-            click(driver, '//*[@id="valorRateio_input"]')
-            fill(driver, '//*[@id="valorRateio_input"]', '100') # 100% of the value.
-            click(driver, '//*[@id="btnAdicionarRateio"]/span[2]')
-            click(driver, '//*[@id="btnSalvarSolicitacao"]/span[2]')
+            click(driver, 'input#valorRateio_input')
+            fill(driver, 'input#valorRateio_input', '100') # 100% of the value.
+            click(driver, 'button#btnAdicionarRateio')
+            click(driver, 'button#btnSalvarSolicitacao')
 
             # Confirming and finishing.
             while True:
                 try:
-                    amount_elements = driver.find_elements(by = By.XPATH, value = '//*[@id="j_idt782"]')
+                    amount_elements = driver.find_elements(by = By.CSS_SELECTOR, value = 'button#j_idt782')
                     amount_elements[-1].click() # Clicking on the last element of the list "amount_elements", which is the "Sim" button.
                     break
                 except:
@@ -362,19 +359,18 @@ class main(QMainWindow): # Class to represent the automation code and its settin
                 self.inserir_primeiro_cte = False
                 while True:
                     try:
-                        click(driver, '//*[@id="btnCriarPedido"]/span[2]')
+                        click(driver, '#btnCriarPedido')
                         driver.refresh()
                         break
                     except:
                         pass
-            elif cte == last_cte: # Awaits unitil the last "CT-e" insertion is finished to finish the browser.
+            elif cte == last_cte: # Awaits until the last "CT-e" insertion is finished to finish the browser.
                 while True:
                     try:
-                        click(driver, '//*[@id="btnCriarPedido"]/span[2]')
+                        click(driver, '#btnCriarPedido')
                         break
                     except:
                         pass
-
 #End of class.
 
 #Execute the software.
