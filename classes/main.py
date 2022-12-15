@@ -118,9 +118,10 @@ class main(QMainWindow): # Class to represent the automation code and its settin
             click(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos > div:nth-child(1)')
 
             # Insert "CT-e" pdf.
-            fill(driver, 'input#tbViewDigitalizacaoNf\:accordionAnexos\:j_idt465_input', self.cte_path + "/" + cte + ".pdf")
+                               
+            fill(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos\:pnAnexosNota_content > div.ui-fileupload.ui-widget.ui-fileupload-responsive > div.ui-fileupload-buttonbar.ui-widget-header.ui-corner-top > span > input[type=file]', self.cte_path + "/" + cte + ".pdf")
             time.sleep(0.5)
-            click(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos\:j_idt465 > div.ui-fileupload-buttonbar.ui-widget-header.ui-corner-top > button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-fileupload-upload')
+            click(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos\:pnAnexosNota_content > div.ui-fileupload.ui-widget.ui-fileupload-responsive > div.ui-fileupload-buttonbar.ui-widget-header.ui-corner-top > button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.ui-fileupload-upload')
 
             # "Data de vencimento".
             while True:
@@ -176,7 +177,7 @@ class main(QMainWindow): # Class to represent the automation code and its settin
             # Confirm and finish.
             while True:
                 try:
-                    amount_elements = driver.find_elements(by = By.CSS_SELECTOR, value = 'button#j_idt782')
+                    amount_elements = driver.find_elements(by = By.CSS_SELECTOR, value = 'button#j_idt781')
                     amount_elements[-1].click() # Click on the last element of the list "amount_elements", which is the "Sim" button.
                     break
                 except:

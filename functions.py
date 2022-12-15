@@ -50,14 +50,14 @@ def inserir_boleto(driver, fatura_path):
 def agrupar_nota(driver, primeiro_cte):
     click(driver, 'div#tbViewDigitalizacaoNf\:accordionAnexos > div:nth-child(3)')
     time.sleep(0.5)
-    fill(driver, 'input#tbViewDigitalizacaoNf\:accordionAnexos\:dtDigitalizacaoNFAgrupado\:j_idt503\:filter', primeiro_cte)
+    fill(driver, 'input#tbViewDigitalizacaoNf\:accordionAnexos\:dtDigitalizacaoNFAgrupado\:j_idt502\:filter', primeiro_cte)
     time.sleep(0.5)
-    click(driver, 'button#tbViewDigitalizacaoNf\:accordionAnexos\:dtDigitalizacaoNFAgrupado\:0\:j_idt512')
+    click(driver, 'button#tbViewDigitalizacaoNf\:accordionAnexos\:dtDigitalizacaoNFAgrupado\:0\:j_idt511')
     time.sleep(0.5)
 
     while True:
         try:
-            amount_elements = driver.find_elements(by = By.CSS_SELECTOR, value = 'button#j_idt782')
+            amount_elements = driver.find_elements(by = By.CSS_SELECTOR, value = 'button#j_idt781')
             amount_elements[-1].click() # Click on the list item of amount_elements list, which is the "Sim" button.
             break
         except:
