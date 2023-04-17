@@ -25,11 +25,15 @@
   <property name="windowTitle">
    <string>MySaga - Login</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>images/mySaga - icon.jpg</normaloff>images/mySaga - icon.jpg</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="leLogin">
+   <widget class="QLineEdit" name="leUser">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -50,7 +54,7 @@
      <string>Digite o usuário</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="leSenha">
+   <widget class="QLineEdit" name="lePassword">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -157,8 +161,8 @@
     </property>
    </widget>
    <zorder>label_2</zorder>
-   <zorder>leLogin</zorder>
-   <zorder>leSenha</zorder>
+   <zorder>leUser</zorder>
+   <zorder>lePassword</zorder>
    <zorder>pbLogin</zorder>
    <zorder>label</zorder>
    <zorder>imgMySaga</zorder>

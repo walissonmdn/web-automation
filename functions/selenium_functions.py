@@ -18,6 +18,9 @@ def selenium_find_elements(driver, css_selector):
 def selenium_get_text(element):
     return element.text
 
+def selenium_refresh(driver):
+    driver.refresh()
+
 def selenium_select(element):
     return Select(element)
 
@@ -26,3 +29,4 @@ def selenium_select_by_visible_text(element, text):
 
 def selenium_send_keys(element, text):
     element.send_keys(text)
+

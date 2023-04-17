@@ -28,11 +28,15 @@
   <property name="windowTitle">
    <string>Digitalização</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>images/mySaga - icon.jpg</normaloff>images/mySaga - icon.jpg</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="gbUnidade">
+   <widget class="QGroupBox" name="gbCNPJ">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -161,7 +165,7 @@
      </attribute>
     </widget>
    </widget>
-   <widget class="QComboBox" name="cbFormadePagamento">
+   <widget class="QComboBox" name="cbPaymentMethod">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -195,7 +199,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="lbFormadePagamento">
+   <widget class="QLabel" name="lbPaymentMethod">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -249,7 +253,7 @@
      <string>Documentos de CT-e</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="leFatura">
+   <widget class="QLineEdit" name="leInvoice">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -271,7 +275,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QGroupBox" name="gbPrimeiraNota">
+   <widget class="QGroupBox" name="gbFirstCTe">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -292,7 +296,7 @@
     <property name="checkable">
      <bool>false</bool>
     </property>
-    <widget class="QLabel" name="lbPrimeiraNota">
+    <widget class="QLabel" name="lbFirstCTe">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -333,7 +337,7 @@
       <string notr="true">buttonGroup</string>
      </attribute>
     </widget>
-    <widget class="QRadioButton" name="rbSim">
+    <widget class="QRadioButton" name="rbYes">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -355,7 +359,7 @@
       <string notr="true">buttonGroup</string>
      </attribute>
     </widget>
-    <widget class="QRadioButton" name="rbNao">
+    <widget class="QRadioButton" name="rbNo">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -378,7 +382,7 @@
      </attribute>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pbProcurarFatura">
+   <widget class="QPushButton" name="pbSearchInvoice">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -397,7 +401,7 @@
      <string>Procurar</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="gbFatura">
+   <widget class="QGroupBox" name="gbInvoice">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -416,7 +420,7 @@
      <string>Fatura</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbDigitalizacao">
+   <widget class="QLabel" name="lbDigitalization">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -441,7 +445,7 @@
      <string>Digitalização de CT-e</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="leDatadeVencimento">
+   <widget class="QLineEdit" name="leDueDate">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -475,7 +479,7 @@
      <set>Qt::AlignHCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="lbDatadeVencimento">
+   <widget class="QLabel" name="lbDueDate">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -494,7 +498,7 @@
      <string>Data de vencimento</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pbIniciar">
+   <widget class="QPushButton" name="pbStart">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -513,7 +517,7 @@
      <string>Iniciar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pbLocalizacaoCte">
+   <widget class="QPushButton" name="pbDocumentsFolder">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -532,7 +536,7 @@
      <string>Procurar</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="gbProcurarCte">
+   <widget class="QGroupBox" name="gbDocumentsFolder">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -551,7 +555,7 @@
      <string>Localização dos documentos de CT-e</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="leLocalizacaoCte">
+   <widget class="QLineEdit" name="leFolderPath">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -573,7 +577,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lePrimeiroCte">
+   <widget class="QLineEdit" name="leFirstCTeNumber">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -589,7 +593,7 @@
      <string notr="true">font: 8pt &quot;Noto Serif&quot;;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbPrimeiroCte">
+   <widget class="QLabel" name="lbFirstCTeNumber">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -608,7 +612,7 @@
      <string>Nº do primeiro CT-e</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pbLimpar">
+   <widget class="QPushButton" name="pbClear">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -646,25 +650,25 @@
      <bool>true</bool>
     </property>
    </widget>
-   <zorder>gbProcurarCte</zorder>
-   <zorder>gbFatura</zorder>
-   <zorder>gbPrimeiraNota</zorder>
-   <zorder>gbUnidade</zorder>
-   <zorder>cbFormadePagamento</zorder>
-   <zorder>lbFormadePagamento</zorder>
+   <zorder>gbDocumentsFolder</zorder>
+   <zorder>gbInvoice</zorder>
+   <zorder>gbFirstCTe</zorder>
+   <zorder>gbCNPJ</zorder>
+   <zorder>cbPaymentMethod</zorder>
+   <zorder>lbPaymentMethod</zorder>
    <zorder>pteCte</zorder>
    <zorder>lbCte</zorder>
-   <zorder>leFatura</zorder>
-   <zorder>pbProcurarFatura</zorder>
-   <zorder>lbDigitalizacao</zorder>
-   <zorder>leDatadeVencimento</zorder>
-   <zorder>lbDatadeVencimento</zorder>
-   <zorder>pbIniciar</zorder>
-   <zorder>pbLocalizacaoCte</zorder>
-   <zorder>leLocalizacaoCte</zorder>
-   <zorder>lePrimeiroCte</zorder>
-   <zorder>lbPrimeiroCte</zorder>
-   <zorder>pbLimpar</zorder>
+   <zorder>leInvoice</zorder>
+   <zorder>pbSearchInvoice</zorder>
+   <zorder>lbDigitalization</zorder>
+   <zorder>leDueDate</zorder>
+   <zorder>lbDueDate</zorder>
+   <zorder>pbStart</zorder>
+   <zorder>pbDocumentsFolder</zorder>
+   <zorder>leFolderPath</zorder>
+   <zorder>leFirstCTeNumber</zorder>
+   <zorder>lbFirstCTeNumber</zorder>
+   <zorder>pbClear</zorder>
    <zorder>imgGrupoSaga</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -684,24 +688,24 @@
   <tabstop>rbVolkswagen</tabstop>
   <tabstop>rbParque</tabstop>
   <tabstop>rbInvisible_2</tabstop>
-  <tabstop>cbFormadePagamento</tabstop>
-  <tabstop>rbSim</tabstop>
-  <tabstop>rbNao</tabstop>
+  <tabstop>cbPaymentMethod</tabstop>
+  <tabstop>rbYes</tabstop>
+  <tabstop>rbNo</tabstop>
   <tabstop>rbInvisible</tabstop>
-  <tabstop>lePrimeiroCte</tabstop>
-  <tabstop>leDatadeVencimento</tabstop>
-  <tabstop>pbProcurarFatura</tabstop>
-  <tabstop>leFatura</tabstop>
-  <tabstop>pbLocalizacaoCte</tabstop>
-  <tabstop>leLocalizacaoCte</tabstop>
+  <tabstop>leFirstCTeNumber</tabstop>
+  <tabstop>leDueDate</tabstop>
+  <tabstop>pbSearchInvoice</tabstop>
+  <tabstop>leInvoice</tabstop>
+  <tabstop>pbDocumentsFolder</tabstop>
+  <tabstop>leFolderPath</tabstop>
   <tabstop>pteCte</tabstop>
-  <tabstop>pbIniciar</tabstop>
-  <tabstop>pbLimpar</tabstop>
+  <tabstop>pbStart</tabstop>
+  <tabstop>pbClear</tabstop>
  </tabstops>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

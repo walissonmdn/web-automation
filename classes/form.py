@@ -1,160 +1,159 @@
-#Caption:
-#cb: combobox
-#gb: groupbox
-#lb: label
-#le: lineedit
-#pb: pushbutton
-#rb: radiobutton
+# Contractions:
+# cb: combobox
+# gb: groupbox
+# lb: label
+# le: lineedit
+# pb: pushbutton
+# rb: radiobutton
 
 from classes.main import *
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QFileDialog
 
 class form(QMainWindow):   # Fill in the necessary data of a "CT-e"
-    def __init__(self, usuario, senha):
+    def __init__(self, user, password):
         super(form, self).__init__()
         uic.loadUi("ui\\main_window.ui", self)
-        self.usuario = usuario
-        self.senha = senha
-        self.inserir_primeiro_cte = False
+        self.user = user
+        self.password = password
+        self.insert_first_cte = False
         self.config()
         self.show()
-        self.cbFormadePagamento.currentTextChanged.connect(self.forma_pagamento_changed)
-        self.rbSim.toggled.connect(self.rbSim_toggled)
-        self.rbNao.toggled.connect(self.rbNao_toggled)
-        self.pbProcurarFatura.clicked.connect(self.encontrar_fatura)
-        self.pbLocalizacaoCte.clicked.connect(self.encontrar_pasta_cte)
-        self.pbLimpar.clicked.connect(self.limpar)
-        self.pbIniciar.clicked.connect(self.iniciar)
+        self.cbPaymentMethod.currentTextChanged.connect(self.payment_method_changed)
+        self.rbYes.toggled.connect(self.rbYes_toggled)
+        self.rbNo.toggled.connect(self.rbNo_toggled)
+        self.pbSearchInvoice.clicked.connect(self.find_invoice)
+        self.pbDocumentsFolder.clicked.connect(self.find_documents_folder)
+        self.pbClear.clicked.connect(self.clear)
+        self.pbStart.clicked.connect(self.start)
 
     # Initialize the elements of the window.
     def config(self):
         self.rbInvisible.setVisible(False) # Invisible button to force others to be unchecked in specific situations.
         self.rbInvisible_2.setVisible(False) # Invisible button to force others to be unchecked in specific situations.
-        self.leFatura.setReadOnly(True)
-        self.leLocalizacaoCte.setReadOnly(True)
+        self.leInvoice.setReadOnly(True)
+        self.leFolderPath.setReadOnly(True)
 
     # When "Forma de pagamento" combobox is changed:
-    def forma_pagamento_changed(self):
-        if self.cbFormadePagamento.currentText() == "Boleto Agrupado":
-            self.gbPrimeiraNota.setEnabled(True) 
-            self.lbPrimeiraNota.setEnabled(True)
-            self.rbSim.setEnabled(True) 
-            self.rbNao.setEnabled(True)
-            self.pbProcurarFatura.setEnabled(False)
-            self.leFatura.setEnabled(False)
-            self.leFatura.setText("")
+    def payment_method_changed(self):
+        if self.cbPaymentMethod.currentText() == "Boleto Agrupado":
+            self.gbFirstCTe.setEnabled(True) 
+            self.lbFirstCTe.setEnabled(True)
+            self.rbYes.setEnabled(True) 
+            self.rbNo.setEnabled(True)
+            self.pbSearchInvoice.setEnabled(False)
+            self.leInvoice.setEnabled(False)
+            self.leInvoice.setText("")
 
-        elif self.cbFormadePagamento.currentText() == "Boleto em Anexo":
+        elif self.cbPaymentMethod.currentText() == "Boleto em Anexo":
             self.rbInvisible.setChecked(True)
-            self.gbPrimeiraNota.setEnabled(False) 
-            self.lbPrimeiraNota.setEnabled(False)
-            self.rbSim.setEnabled(False) 
-            self.rbNao.setEnabled(False)
-            self.pbProcurarFatura.setEnabled(True)
-            self.leFatura.setEnabled(True)
+            self.gbFirstCTe.setEnabled(False) 
+            self.lbFirstCTe.setEnabled(False)
+            self.rbYes.setEnabled(False) 
+            self.rbNo.setEnabled(False)
+            self.pbSearchInvoice.setEnabled(True)
+            self.leInvoice.setEnabled(True)
 
         else:
             self.rbInvisible.setChecked(True)
-            self.gbPrimeiraNota.setEnabled(False) 
-            self.lbPrimeiraNota.setEnabled(False)
-            self.rbSim.setEnabled(False) 
-            self.rbNao.setEnabled(False)
-            self.pbProcurarFatura.setEnabled(False)
-            self.leFatura.setEnabled(False)
-            self.leFatura.setText("")
+            self.gbFirstCTe.setEnabled(False) 
+            self.lbFirstCTe.setEnabled(False)
+            self.rbYes.setEnabled(False) 
+            self.rbNo.setEnabled(False)
+            self.pbSearchInvoice.setEnabled(False)
+            self.leInvoice.setEnabled(False)
+            self.leInvoice.setText("")
 
-    # When "Yes" button is toggled:
-    def rbSim_toggled(self):
-        if self.rbSim.isChecked() == True:
-            self.lbPrimeiroCte.setEnabled(True)
-            self.lePrimeiroCte.setEnabled(True)
-            self.inserir_primeiro_cte = False
+    # When "Sim" button is toggled:
+    def rbYes_toggled(self):
+        if self.rbYes.isChecked() == True:
+            self.lbFirstCTeNumber.setEnabled(True)
+            self.leFirstCTeNumber.setEnabled(True)
+            self.insert_first_cte = False
         else:
-            self.lePrimeiroCte.setEnabled(False)
-            self.lePrimeiroCte.setEnabled(False)
-            self.inserir_primeiro_cte = True
-            self.lePrimeiroCte.setText("")
+            self.lbFirstCTeNumber.setEnabled(False)
+            self.leFirstCTeNumber.setEnabled(False)
+            self.insert_first_cte = True
+            self.leFirstCTeNumber.setText("")
 
     # When "No" button is toggled:
-    def rbNao_toggled(self):
-        if self.rbNao.isChecked() == True:
-            self.gbFatura.setEnabled(True)
-            self.leFatura.setEnabled(True)
-            self.pbProcurarFatura.setEnabled(True)
+    def rbNo_toggled(self):
+        if self.rbNo.isChecked() == True:
+            self.gbInvoice.setEnabled(True)
+            self.leInvoice.setEnabled(True)
+            self.pbSearchInvoice.setEnabled(True)
         else:
-            self.gbFatura.setEnabled(False)
-            self.leFatura.setEnabled(False)
-            self.pbProcurarFatura.setEnabled(False)
-            self.leFatura.setText("")    
+            self.gbInvoice.setEnabled(False)
+            self.leInvoice.setEnabled(False)
+            self.pbSearchInvoice.setEnabled(False)
+            self.leInvoice.setText("")    
 
-    # Button to search for "fatura".
-    def encontrar_fatura(self): 
+    # Button to search for the invoice.
+    def find_invoice(self): 
         path = QFileDialog.getOpenFileName()
-        path = self.leFatura.setText(path[0])        
+        path = self.leInvoice.setText(path[0])        
 
     # Button to serch for the path of the "CT-e" documents.
-    def encontrar_pasta_cte(self):
+    def find_documents_folder(self):
         path = QFileDialog.getExistingDirectory()
-        path = self.leLocalizacaoCte.setText(path)
+        path = self.leFolderPath.setText(path)
 
     # Store data in variables.
     def salvar_dados(self):
         if self.rbCitroen.isChecked():
-            self.unidade = "11.458.618/0001-16"
+            self.cnpj = "11.458.618/0001-16"
         elif self.rbJeep.isChecked():
-            self.unidade = "21.214.513/0001-75"
+            self.cnpj = "21.214.513/0001-75"
         elif self.rbVolkswagen.isChecked():
-            self.unidade = "03.267.961/0001-55"
+            self.cnpj = "03.267.961/0001-55"
         elif self.rbParque.isChecked():
-            self.unidade = "03.267.961/0004-06"
+            self.cnpj = "03.267.961/0004-06"
         
-        self.data_vencimento = self.leDatadeVencimento.text()
-        self.forma_pagamento = self.cbFormadePagamento.currentText()
+        self.data_vencimento = self.leDueDate.text()
+        self.forma_pagamento = self.cbPaymentMethod.currentText()
 
         if self.forma_pagamento == "Boleto Agrupado":
-            if self.rbSim.isChecked():
-                self.inserir_primeiro_cte = False
-            elif self.rbNao.isChecked:
-                self.inserir_primeiro_cte = True
+            if self.rbYes.isChecked():
+                self.insert_first_cte = False
+            elif self.rbNo.isChecked:
+                self.insert_first_cte = True
         else:
             pass
         
-        self.fatura_path = self.leFatura
+        self.fatura_path = self.leInvoice
         self.cte_lista = (self.pteCte.toPlainText()).split()
     
-    def limpar(self):
+    def clear(self):
         self.rbInvisible_2.setChecked(True)
         self.rbInvisible.setChecked(True)
-        self.cbFormadePagamento.setCurrentText("")
-        self.lePrimeiroCte.setText("")
-        self.leDatadeVencimento.setText("")
-        self.leFatura.setText("")
-        self.leLocalizacaoCte.setText("")
+        self.cbPaymentMethod.setCurrentText("")
+        self.leFirstCTeNumber.setText("")
+        self.leDueDate.setText("")
+        self.leInvoice.setText("")
+        self.leFolderPath.setText("")
         self.pteCte.setPlainText("")
 
-    def iniciar(self):
+    def start(self):
         # Validation.
         if self.rbCitroen.isChecked() == False and self.rbJeep.isChecked() == False and self.rbVolkswagen.isChecked() == False and self.rbParque.isChecked() == False:
             QMessageBox.about(self, "Alerta", "Selecione a unidade.")
-        elif self.cbFormadePagamento.currentText() == "":
+        elif self.cbPaymentMethod.currentText() == "":
             QMessageBox.about(self, "Alerta", "Selecione a forma de pagamento.")
-        elif self.cbFormadePagamento.currentText() == "Boleto Agrupado" and self.rbSim.isChecked() == False and self.rbNao.isChecked() == False:
+        elif self.cbPaymentMethod.currentText() == "Boleto Agrupado" and self.rbYes.isChecked() == False and self.rbNo.isChecked() == False:
             QMessageBox.about(self, "Alerta", "Selecione a opção relacionada a inserção da primeira nota.")
-        elif self.cbFormadePagamento.currentText() == "Boleto Agrupado" and self.rbSim.isChecked() == True and  self.lePrimeiroCte.text() == "":
+        elif self.cbPaymentMethod.currentText() == "Boleto Agrupado" and self.rbYes.isChecked() == True and  self.leFirstCTeNumber.text() == "":
             QMessageBox.about(self, "Alerta", "Insira o número do primeiro CT-e.")
-        elif self.leDatadeVencimento.text() == "//":
+        elif self.leDueDate.text() == "//":
             QMessageBox.about(self, "Alerta", "Digite a data de vencimento.")
-        elif self.cbFormadePagamento.currentText() == "Boleto Agrupado" and self.rbSim.isChecked() == True and  self.leLocalizacaoCte.text() == "":
+        elif self.cbPaymentMethod.currentText() == "Boleto Agrupado" and self.rbYes.isChecked() == True and  self.leFolderPath.text() == "":
             QMessageBox.about(self, "Alerta", "Insira a localização dos documentos de CT-e.")                   
-        elif self.leFatura.text() == "" and self.rbSim.isChecked() == False:
+        elif self.leInvoice.text() == "" and self.rbYes.isChecked() == False:
             QMessageBox.about(self, "Alerta", "Insira a Fatura.")
-        elif self.leLocalizacaoCte.text() == "":
+        elif self.leFolderPath.text() == "":
             QMessageBox.about(self, "Alerta", "Insira a localização dos documentos de CT-e.")
         elif self.pteCte.toPlainText() == "":
             QMessageBox.about(self, "Alerta", "Digite o(s) número(s) do(s) documento(s) de CT-e.")
-        # Create an instance of the automation code.
-        else:
+        else: # Create an instance of the automation code.
             self.salvar_dados()
-            self.main = main(self.usuario, self.senha, self.unidade, self.cbFormadePagamento.currentText(), self.inserir_primeiro_cte, self.lePrimeiroCte.text(), self.leDatadeVencimento.text(), self.leFatura.text(), self.leLocalizacaoCte.text(), self.cte_lista)
+            self.main = main(self.user, self.password, self.cnpj, self.cbPaymentMethod.currentText(), self.insert_first_cte, self.leFirstCTeNumber.text(), self.leDueDate.text(), self.leInvoice.text(), self.leFolderPath.text(), self.cte_lista)
 ### End of class "main_window".
