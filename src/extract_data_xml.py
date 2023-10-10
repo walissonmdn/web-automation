@@ -30,7 +30,7 @@ class XMLDataExtractor:
         date_of_issue_element = xml_data.getElementsByTagName("dhEmi")
         date_of_issue = date_of_issue_element[0].firstChild.data
         date_of_issue_formatted = f"{date_of_issue[8]}{date_of_issue[9]}/{date_of_issue[5]}{date_of_issue[6]}/{date_of_issue[0]}{date_of_issue[1]}{date_of_issue[2]}{date_of_issue[3]}"
-
+        
         return {
             "document_number": document_number, 
             "access_key": access_key,

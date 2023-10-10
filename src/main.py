@@ -7,56 +7,56 @@
 # rb: radiobutton
 
 #from functions.general_functions import *
-from src.selenium import *
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
-from selenium.common.exceptions import NoSuchWindowException, WebDriverException
+from selenium.common.exceptions import WebDriverException
+from src.extract_data_xml import *
+from src.selenium import *
+from src.webpages.digitalization_page import *
+from src.webpages.login_page import *
 import time
 import urllib3.exceptions
-from src.webpages.login_page import *
-from src.webpages.digitalization_page import *
-from src.extract_data_xml import *
 
 class Main(QMainWindow): # Class to represent the automation code and its settings.
-    def __init__(self, user, password, legal_person_number, payment_method, insert_first_cte, first_cte_number, due_date, invoice_path, documents_path, documents_numbers_list):
+    def __init__(self, user, password, legal_person_number, payment_method, insert_first_document, first_document_number, due_date, invoice_path, documents_path, documents_numbers_list):
         self.user = user
         self.password = password
         self.legal_person_number = legal_person_number
         self.payment_method = payment_method
-        self.insert_first_cte = insert_first_cte
+        self.insert_first_document = insert_first_document
         self.due_date = due_date
         self.invoice_path = invoice_path
         self.documents_path = documents_path
         self.documents_numbers_list = documents_numbers_list
         
         # If the first "CT-e" is already in the system, specify its number. Otherwise, the number will be the first "CT-e"'s inserted.
-        if insert_first_cte == True:
-            self.first_cte_number = self.documents_numbers_list[0].lstrip('0')
+        if insert_first_document == True:
+            self.first_document_number = self.documents_numbers_list[0].lstrip('0')
         else:
-            self.first_cte_number = first_cte_number.lstrip('0')
+            self.first_document_number = first_document_number.lstrip('0')
 
-        # The amount of tabs that'll be opened.
+        # Up to 5 tabs will opened on the browser.
         if len(self.documents_numbers_list) < 5:
-            self.amount_windows = len(self.documents_numbers_list)
+            self.number_of_tabs = len(self.documents_numbers_list)
         else:
-            self.amount_windows = 5 # If there are more than 5 "CT-e" documents, only 5 tabs will be opened.
+            self.number_of_tabs = 5
         
-        # It calls the function to execute the automation code.
+        # It calls the method to execute the automation code.
         execution = self.run()
-        status = execution
+
         if execution == "Completed.":
             msg = QMessageBox()
             msg.setWindowTitle("Alerta!")
-            msg.setText(status) # It'll be informed on the screen.
+            msg.setText("Finalizado.")
             msg.exec_()
         elif execution == "File number is different from the xml tree.":
             msg = QMessageBox()
             msg.setWindowTitle("Alerta!")
-            msg.setText(status) # It'll be informed on the screen.
+            msg.setText("Número do arquivo de CT-e está diferente do número na árvore do xml.")
             msg.exec_()
         elif execution == "Failure to communicate with the browser.":
             msg = QMessageBox()
             msg.setWindowTitle("Atenção!")
-            msg.setText(status) # It'll be informed on the screen.
+            msg.setText("Falha de comunicação com o navegador.")
             msg.exec_()
         
     def run(self):
@@ -71,14 +71,12 @@ class Main(QMainWindow): # Class to represent the automation code and its settin
 
             digitalization_page = DigitalizationPage(driver, self.legal_person_number)
             digitalization_page.get_digitalization_page()
-            digitalization_page.open_multiple_tabs(self.amount_windows)
-
-            window_index = -1 # There'll be an increase in the first loop.        
+            digitalization_page.open_multiple_tabs(self.number_of_tabs)
 
             for document_number in self.documents_numbers_list:
                 document_number = document_number.lstrip('0')
 
-                digitalization_page.switch_tabs(self.amount_windows, window_index)
+                digitalization_page.switch_tabs(self.number_of_tabs)
             
                 xml_file = XMLDataExtractor(document_number, self.documents_path)
                 xml_data = xml_file.extract_data()
@@ -94,7 +92,7 @@ class Main(QMainWindow): # Class to represent the automation code and its settin
                 else:
                     digitalization_page.fill_in_form(document_number, self.legal_person_number, xml_data)
 
-                digitalization_page.select_payment_method(self.payment_method, self.insert_first_cte)
+                digitalization_page.select_payment_method(self.payment_method, self.insert_first_document)
                 # Make sure payment method change has been completed.
                 driver.wait_for_element_to_disappear("div#tbViewDigitalizacaoNf\:j_idt415 > div:nth-child(1) > div:nth-child(3) > label[for='tbViewDigitalizacaoNf:itAgencia']")
                 
@@ -106,11 +104,11 @@ class Main(QMainWindow): # Class to represent the automation code and its settin
 
                 digitalization_page.fill_in_due_date(self.due_date)
 
-                if self.payment_method == "Boleto em Anexo" or (self.payment_method == "Boleto Agrupado" and self.insert_first_cte == True):
+                if self.payment_method == "Boleto em Anexo" or (self.payment_method == "Boleto Agrupado" and self.insert_first_document == True):
                     digitalization_page.upload_invoice(self.invoice_path)
                     
-                elif self.payment_method == "Boleto Agrupado" and self.insert_first_cte == False:
-                    digitalization_page.relate_documents(self.first_cte_number)
+                elif self.payment_method == "Boleto Agrupado" and self.insert_first_document == False:
+                    digitalization_page.relate_documents(self.first_document_number)
 
                 # Go to the next step.
                 driver.click_loop("button#tbViewDigitalizacaoNf\:btnProximoRateio")
@@ -120,8 +118,8 @@ class Main(QMainWindow): # Class to represent the automation code and its settin
 
                 digitalization_page.save()
 
-                if self.payment_method == "Boleto Agrupado" and self.insert_first_cte == True:
-                    self.insert_first_cte = False
+                if self.payment_method == "Boleto Agrupado" and self.insert_first_document == True:
+                    self.insert_first_document = False
                     digitalization_page.await_unitl_first_digitalization_finishes()
 
                 elif document_number == self.documents_numbers_list[len(self.documents_numbers_list)-1]: # Awaits until the last "CT-e" insertion is finished to finish the browser.
@@ -129,7 +127,8 @@ class Main(QMainWindow): # Class to represent the automation code and its settin
 
                 print("ok")
                 
-        except (NoSuchWindowException, WebDriverException, urllib3.exceptions.ProtocolError):
+            return "Completed."
+        except (WebDriverException, urllib3.exceptions.ProtocolError):
             error = "Failure to communicate with the browser." 
             return error
             

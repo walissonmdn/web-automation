@@ -1,12 +1,11 @@
-import time
-from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, StaleElementReferenceException, ElementClickInterceptedException
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
+import time
 
 class DigitalizationPage:
     def __init__(self, driver, legal_person_number) :
         self.driver = driver
         self.legal_person_number = legal_person_number
-
 
     def get_digitalization_page(self):
         self.driver.get_page("https://mysaga.gruposaga.com.br/sistema/CSC/digitalizacaoNf/digitalizacaoNF.jsf?faces-redirect=true")
@@ -19,16 +18,19 @@ class DigitalizationPage:
                 self.driver.script("window.open('https://mysaga.gruposaga.com.br/sistema/CSC/digitalizacaoNf/digitalizacaoNF.jsf?faces-redirect=true');")
                 open+=1
                 time.sleep(0.5) 
-            
-    def switch_tabs(self, number_of_tabs, tab_index):
-        # Deal with numbers of the windows.
-        if tab_index == number_of_tabs - 1:
-            tab_index = 0
-        else:
-            tab_index += 1
-
+    
+    # Static variable; There'll be an increase in the first loop. 
+    tab_index = 0 
+    def switch_tabs(self, number_of_tabs):
         # Select window in the browser to digitalize a document.
-        self.driver.switch_to_window(tab_index)
+        self.driver.switch_to_window(DigitalizationPage.tab_index)
+        
+        if DigitalizationPage.tab_index == number_of_tabs - 1:
+            DigitalizationPage.tab_index = 0
+        else:
+            DigitalizationPage.tab_index += 1
+
+        
 
     def digitalize_automatically(self):
         pass
@@ -152,7 +154,7 @@ class DigitalizationPage:
                                 self.driver.click_loop("li#tbViewDigitalizacaoNf\:srServicoFornecedor_"+str(num))
                                 exit_loop = True
                                 break
-                    
+                        print(f"exit_loop: {str(exit_loop)}")
                         if exit_loop == True:
                             while True:
                                 try:
@@ -161,27 +163,27 @@ class DigitalizationPage:
                                 except:
                                     try:
                                         valor = self.driver.find_element("input#tbViewDigitalizacaoNf\:itValorNota")
-                                        self.driver.send_keys(valor)
+                                        self.driver.clear(valor)
                                         time.sleep(0.5)
                                         self.driver.send_keys(valor, xml_data["document_value"])
                                         time.sleep(0.5)
 
                                         num_cte = self.driver.find_element("input#tbViewDigitalizacaoNf\:itNumeroNota")
-                                        self.driver.send_keys(num_cte)
+                                        self.driver.clear(num_cte)
                                         time.sleep(0.5)
                                         self.driver.send_keys(num_cte, document_number)
                                         time.sleep(0.5)
                                         self.driver.click_loop("textarea#tbViewDigitalizacaoNf\:itaDescricao")
 
                                         num_serie = self.driver.find_element("input#tbViewDigitalizacaoNf\:itNumeroSerie")
-                                        self.driver.send_keys(num_serie)
+                                        self.driver.clear(num_serie)
                                         time.sleep(0.5)
                                         self.driver.send_keys(num_serie, xml_data["document_serie_number"])
                                         time.sleep(0.5)
                                         self.driver.click_loop("textarea#tbViewDigitalizacaoNf\:itaDescricao")
 
                                         data_emissao = self.driver.find_element("input#tbViewDigitalizacaoNf\:calDataEmissao_input")
-                                        self.driver.send_keys(data_emissao)
+                                        self.driver.clear(data_emissao)
                                         time.sleep(0.5)
                                         self.driver.send_keys(data_emissao, xml_data["date_of_issue"]+Keys.TAB)
                                         time.sleep(0.5)
@@ -252,25 +254,26 @@ class DigitalizationPage:
                 self.driver.send_keys(first_document_field, first_document_number)
                 break
             except:
-                try:
-                    first_document_field = self.driver.find_element("input#tbViewDigitalizacaoNf\:accordionAnexos\:dtDigitalizacaoNFAgrupado\:j_idt588\:filter")
-                    self.driver.send_keys(first_document_field, first_document_number)
-                    break
-                except:
-                    pass
+                pass
 
         time.sleep(0.5)
+                                                                  
         while True:
             try:
-                self.driver.click_loop(self.driver.find_element("#tbViewDigitalizacaoNf\:accordionAnexos\:dtDigitalizacaoNFAgrupado\:0\:j_idt685"))
+                self.driver.click(self.driver.find_element("#tbViewDigitalizacaoNf\:accordionAnexos\:dtDigitalizacaoNFAgrupado\:0\:j_idt685"))
+                print("clicked")
                 break
             except:
-                try:
-                    self.driver.click_loop(self.driver.find_element("button#tbViewDigitalizacaoNf\:accordionAnexos\:dtDigitalizacaoNFAgrupado\:0\:j_idt681"))
-                    break
-                except:
-                    pass
+                pass
         time.sleep(0.5)
+
+        while True:
+            try:
+                amount_elements = self.driver.find_elements("button#j_idt448") 
+                self.driver.click(amount_elements[-1]) # Click on the last element of the list "amount_elements", which is the "Sim" button.
+                break
+            except:
+                pass
 
     def insert_payer(self):
         # Insert "rateio".
