@@ -30,14 +30,6 @@ class DigitalizationPage:
         else:
             DigitalizationPage.tab_index += 1
 
-        
-
-    def digitalize_automatically(self):
-        pass
-
-    def digitalize_manually(self):
-        pass
-
     def find_document_automatically(self, xml_data):
         self.driver.click_loop("button#btnCriarPedido")
         self.driver.click_loop("table#opcoesDigitalizacao > tbody > tr > td:nth-child(4) > div > div.ui-radiobutton-box.ui-widget.ui-corner-all.ui-state-default")
@@ -47,7 +39,6 @@ class DigitalizationPage:
         self.driver.fill_loop("input#itChaveCteDigitalizacao", xml_data["access_key"])
         self.driver.click_loop("button#btnEnviarCaptchaCteInformar")
         
-
     def check_if_document_has_been_found(self):
         while True:
             try:
@@ -117,7 +108,7 @@ class DigitalizationPage:
         self.driver.fill_loop('input#tbViewDigitalizacaoNf\:unidadeOrganizacional_input', legal_person_number)
         self.driver.click_loop("span#tbViewDigitalizacaoNf\:unidadeOrganizacional_panel > table > tbody > tr[data-item-label*='"+legal_person_number+"']")
         self.driver.click_loop("table#tbViewDigitalizacaoNf\:srTipoNota > tbody > tr > td:nth-child(1) > div > div.ui-radiobutton-box.ui-widget.ui-corner-all.ui-state-default")
-        self.driver.fill_loop("input#tbViewDigitalizacaoNf\:itChaveNota", xml_data["document_number"]+Keys.TAB)
+        self.driver.fill_loop("input#tbViewDigitalizacaoNf\:itChaveNota", xml_data["access_key"]+Keys.TAB)
         time.sleep(1)
 
         #Type the value of the "CT-e"
